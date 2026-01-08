@@ -6,23 +6,23 @@ const { UUID, UUIDV4 } = require("sequelize");
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("units", {
-      unit_id: {
+      unitId: {
         allowNull: false,
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
       },
-      course_id: {
+      courseId: {
         type: Sequelize.UUID,
         references: {
           model: "courses",
-          key: "course_id",
+          key: "courseId",
         },
       },
-      unit_code: {
+      unitCode: {
         type: Sequelize.STRING,
       },
-      unit_name: {
+      unitName: {
         type: Sequelize.STRING,
       },
       createdAt: {

@@ -3,30 +3,30 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("departments", {
-      dept_id: {
+      deptId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      institution_id: {
+      institutionId: {
         type: Sequelize.UUID,
         references: {
           model: "institutions",
-          key: "institution_id",
+          key: "institutionId",
         },
       },
-      dept_code: {
+      deptCode: {
         type: Sequelize.STRING,
       },
-      dept_name: {
+      deptName: {
         type: Sequelize.STRING,
       },
       hod: {
         type: Sequelize.UUID,
         references: {
           model: "users",
-          key: "user_id",
+          key: "userId",
         },
       },
       createdAt: {

@@ -5,20 +5,20 @@ module.exports = (sequelize) => {
   const Department = sequelize.define(
     "Department",
     {
-      dept_id: {
+      deptId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      institution_id: {
+      institutionId: {
         type: DataTypes.UUID,
         references: {
           model: "institutions",
-          key: "institution_id",
+          key: "institutionId",
         },
       },
-      dept_code: {
+      deptCode: {
         type: DataTypes.STRING,
       },
       deptName: {
@@ -28,7 +28,7 @@ module.exports = (sequelize) => {
         type: DataTypes.UUID,
         references: {
           model: "users",
-          key: "user_id",
+          key: "userId",
         },
       },
       createdAt: {
@@ -40,14 +40,14 @@ module.exports = (sequelize) => {
         type: DataTypes.DATE,
       },
     },
-    { tableName: "departments", underscored: true, timestamps: true }
+    { tableName: "departments", underscored: false, timestamps: true }
   );
 
   Department.associate = (models) => {
-    Department.belongsTo(models.Institution, { foreignKey: "institution_id" });
+    Department.belongsTo(models.Institution, { foreignKey: "institutionId" });
     Department.belongsTo(models.User, { foreignKey: "hod", as: "hodUser" });
     Department.hasMany(models.Course, {
-      foreignKey: "department_id",
+      foreignKey: "departmentId",
       as: "courses",
     });
   };

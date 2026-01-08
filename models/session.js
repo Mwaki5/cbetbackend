@@ -5,26 +5,26 @@ module.exports = (sequelize) => {
   const Session = sequelize.define(
     "Session",
     {
-      session_id: {
+      sessionId: {
         allowNull: false,
         primaryKey: true,
         type: DataTypes.UUID,
-        defaultValue: UUIDV4,
+        defaultValue: DataTypes.UUIDV4,
       },
-      institution_id: {
+      institutionId: {
         type: DataTypes.UUID,
         references: {
           model: "institutions",
-          key: "institution_id",
+          key: "institutionId",
         },
       },
-      session_name: {
+      sessionName: {
         type: DataTypes.STRING,
       },
-      start_date: {
+      startDate: {
         type: DataTypes.DATE,
       },
-      end_date: {
+      endDate: {
         type: DataTypes.DATE,
       },
       status: {
@@ -39,13 +39,13 @@ module.exports = (sequelize) => {
         type: DataTypes.DATE,
       },
     },
-    { tableName: "sessions", underscored: true, timestamps: true }
+    { tableName: "sessions", underscored: false, timestamps: true }
   );
 
   Session.associate = (models) => {
-    Session.belongsTo(models.Institution, { foreignKey: "institution_id" });
+    Session.belongsTo(models.Institution, { foreignKey: "institutionId" });
     Session.hasMany(models.Enrollment, {
-      foreignKey: "session_id",
+      foreignKey: "sessionId",
       as: "enrollments",
     });
     Session.hasMany(models.TrainerUnit, {

@@ -5,16 +5,16 @@ module.exports = (sequelize) => {
   const User = sequelize.define(
     "User",
     {
-      user_id: {
+      userId: {
         allowNull: false,
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
-      institution_id: {
+      institutionId: {
         type: DataTypes.UUID,
         references: {
-          key: "institution_id",
+          key: "institutionId",
           model: "institutions",
         },
       },
@@ -33,8 +33,20 @@ module.exports = (sequelize) => {
           isEmail: true,
         },
       },
-      password_harsh: {
+      profilePic: {
         type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      passwordHarsh: {
+        type: DataTypes.TEXT,
+      },
+      refreshToken: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      refreshExpiresAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
       },
       role: {
         type: DataTypes.ENUM(
@@ -58,27 +70,27 @@ module.exports = (sequelize) => {
         type: DataTypes.DATE,
       },
     },
-    { tableName: "users", underscored: true, timestamps: true }
+    { tableName: "users", underscored: false, timestamps: true }
   );
   User.associate = function (models) {
     User.belongsTo(models.Institution, {
-      foreignKey: "institution_id",
+      foreignKey: "institutionId",
     });
     User.hasMany(models.Enrollment, {
-      foreignKey: "student_id",
+      foreignKey: "studentId",
       as: "enrollments",
     });
     User.hasMany(models.TrainerUnit, {
       foreignKey: "trainerId",
       as: "trainerUnits",
     });
-    User.hasMany(models.Mark, { foreignKey: "graded_by", as: "gradedMarks" });
+    User.hasMany(models.Mark, { foreignKey: "gradedBy", as: "gradedMarks" });
     User.hasMany(models.Evidence, {
-      foreignKey: "reviewed_by",
+      foreignKey: "reviewedBy",
       as: "reviewedEvidences",
     });
     User.hasMany(models.ActivityLog, {
-      foreignKey: "user_id",
+      foreignKey: "userId",
       as: "activityLogs",
     });
     User.hasOne(models.Department, {

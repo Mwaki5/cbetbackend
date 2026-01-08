@@ -5,25 +5,25 @@ module.exports = (sequelize) => {
   const Subscription = sequelize.define(
     "Subscription",
     {
-      subscription_id: {
+      subscriptionId: {
         primaryKey: true,
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
       },
-      institution_id: {
+      institutionId: {
         type: DataTypes.UUID,
         references: {
           model: "institutions",
-          key: "institution_id",
+          key: "institutionId",
         },
       },
       plan: {
         type: DataTypes.STRING,
       },
-      max_students: {
+      maxStudents: {
         type: DataTypes.INTEGER,
       },
-      storage_limitMb: {
+      storageLimitMb: {
         type: DataTypes.INTEGER,
       },
       expiresAt: {
@@ -38,12 +38,12 @@ module.exports = (sequelize) => {
         type: DataTypes.DATE,
       },
     },
-    { tableName: "subscriptions", underscored: true, timestamps: true }
+    { tableName: "subscriptions", underscored: false, timestamps: true }
   );
 
   Subscription.associate = (models) => {
     Subscription.belongsTo(models.Institution, {
-      foreignKey: "institution_id",
+      foreignKey: "institutionId",
     });
   };
 

@@ -3,24 +3,24 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("courses", {
-      course_id: {
+      courseId: {
         allowNull: false,
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
       },
-      institution_id: {
+      institutionId: {
         type: Sequelize.UUID,
         references: {
           model: "institutions",
-          key: "institution_id",
+          key: "institutionId",
         },
       },
-      department_id: {
+      departmentId: {
         type: Sequelize.INTEGER,
         references: {
           model: "departments",
-          key: "dept_id",
+          key: "deptId",
         },
       },
       name: {

@@ -3,24 +3,24 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("activity_logs", {
-      log_id: {
+      logId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      user_id: {
+      userId: {
         type: Sequelize.UUID,
         references: {
           model: "users",
-          key: "user_id",
+          key: "userId",
         },
       },
-      institution_id: {
+      institutionId: {
         type: Sequelize.UUID,
         references: {
           model: "institutions",
-          key: "institution_id",
+          key: "institutionId",
         },
       },
       action: {
@@ -29,7 +29,7 @@ module.exports = {
       entity: {
         type: Sequelize.STRING,
       },
-      entity_id: {
+      entityId: {
         type: Sequelize.UUID,
       },
       createdAt: {

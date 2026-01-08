@@ -6,19 +6,19 @@ const { UUID } = require("sequelize");
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("evidences", {
-      evidence_id: {
+      evidenceId: {
         allowNull: false,
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
       },
-      enrollment_id: {
+      enrollmentId: {
         type: Sequelize.UUID,
       },
-      file_url: {
+      fileUrl: {
         type: Sequelize.TEXT,
       },
-      file_type: {
+      fileType: {
         type: Sequelize.STRING,
       },
       description: {
@@ -28,16 +28,20 @@ module.exports = {
         type: Sequelize.ENUM("pending", "approved", "rejected"),
         defaultValue: "approved",
       },
-      reviewed_by: {
+      reviewedBy: {
         type: Sequelize.UUID,
         references: {
           model: "users",
-          key: "user_id",
+          key: "userId",
         },
       },
-      uploaded_at: {
+      uploadedAt: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW,
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,

@@ -5,23 +5,23 @@ module.exports = (sequelize) => {
   const Unit = sequelize.define(
     "Unit",
     {
-      unit_id: {
+      unitId: {
         allowNull: false,
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
-      course_id: {
+      courseId: {
         type: DataTypes.UUID,
         references: {
           model: "courses",
-          key: "course_id",
+          key: "courseId",
         },
       },
-      unit_code: {
+      unitCode: {
         type: DataTypes.STRING,
       },
-      unit_name: {
+      unitName: {
         type: DataTypes.STRING,
       },
       createdAt: {
@@ -33,13 +33,13 @@ module.exports = (sequelize) => {
         type: DataTypes.DATE,
       },
     },
-    { tableName: "units", underscored: true, timestamps: true }
+    { tableName: "units", underscored: false, timestamps: true }
   );
 
   Unit.associate = (models) => {
-    Unit.belongsTo(models.Course, { foreignKey: "course_id" });
+    Unit.belongsTo(models.Course, { foreignKey: "courseId" });
     Unit.hasMany(models.Enrollment, {
-      foreignKey: "unit_id",
+      foreignKey: "unitId",
       as: "enrollments",
     });
     Unit.hasMany(models.TrainerUnit, {

@@ -5,13 +5,13 @@ module.exports = (sequelize) => {
   const Institution = sequelize.define(
     "Institution",
     {
-      institution_id: {
+      institutionId: {
         allowNull: false,
         primaryKey: true,
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
       },
-      institution_name: {
+      institutionName: {
         type: DataTypes.STRING,
       },
       email: {
@@ -25,7 +25,7 @@ module.exports = (sequelize) => {
       address: {
         type: DataTypes.TEXT,
       },
-      password_harsh: {
+      passwordHarsh: {
         type: DataTypes.TEXT,
         allowNull: false,
       },
@@ -44,32 +44,32 @@ module.exports = (sequelize) => {
         type: DataTypes.DATE,
       },
     },
-    { tableName: "institutions", underscored: true, timestamps: true }
+    { tableName: "institutions", underscored: false, timestamps: true }
   );
 
   Institution.associate = (models) => {
     Institution.hasMany(models.User, {
-      foreignKey: "institution_id",
+      foreignKey: "institutionId",
       as: "users",
     });
     Institution.hasMany(models.Department, {
-      foreignKey: "institution_id",
+      foreignKey: "institutionId",
       as: "departments",
     });
     Institution.hasMany(models.Course, {
-      foreignKey: "institution_id",
+      foreignKey: "institutionId",
       as: "courses",
     });
     Institution.hasMany(models.Session, {
-      foreignKey: "institution_id",
+      foreignKey: "institutionId",
       as: "sessions",
     });
     Institution.hasMany(models.Subscription, {
-      foreignKey: "institution_id",
+      foreignKey: "institutionId",
       as: "subscriptions",
     });
     Institution.hasMany(models.ActivityLog, {
-      foreignKey: "institution_id",
+      foreignKey: "institutionId",
       as: "activityLogs",
     });
   };

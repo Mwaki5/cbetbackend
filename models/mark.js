@@ -5,17 +5,17 @@ module.exports = (sequelize) => {
   const Mark = sequelize.define(
     "Mark",
     {
-      mark_id: {
+      markId: {
         allowNull: false,
         primaryKey: true,
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
       },
-      enrollment_id: {
+      enrollmentId: {
         type: DataTypes.UUID,
         references: {
           model: "enrollments",
-          key: "enrollment_id",
+          key: "enrollmentId",
         },
       },
       type: {
@@ -24,11 +24,11 @@ module.exports = (sequelize) => {
       marks: {
         type: DataTypes.INTEGER,
       },
-      graded_by: {
+      gradedBy: {
         type: DataTypes.UUID,
         references: {
           model: "users",
-          key: "user_id",
+          key: "userId",
         },
       },
       createdAt: {
@@ -40,12 +40,12 @@ module.exports = (sequelize) => {
         type: DataTypes.DATE,
       },
     },
-    { tableName: "marks", underscored: true, timestamps: true }
+    { tableName: "marks", underscored: false, timestamps: true }
   );
 
   Mark.associate = (models) => {
-    Mark.belongsTo(models.Enrollment, { foreignKey: "enrollment_id" });
-    Mark.belongsTo(models.User, { foreignKey: "graded_by", as: "grader" });
+    Mark.belongsTo(models.Enrollment, { foreignKey: "enrollmentId" });
+    Mark.belongsTo(models.User, { foreignKey: "gradedBy", as: "grader" });
   };
 
   return Mark;

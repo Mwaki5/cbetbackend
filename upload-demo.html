@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Upload Demo — Institution Registration</title>
+</head>
+<body>
+  <h3>Institution Registration (logo upload demo)</h3>
+  <form id="form">
+    <div>
+      <label>Institution name: <input name="institution_name" value="Demo School" required></label>
+    </div>
+    <div>
+      <label>Email: <input name="email" type="email" value="demo@school.test" required></label>
+    </div>
+    <div>
+      <label>Phone: <input name="phone" value="+123456789" required></label>
+    </div>
+    <div>
+      <label>Address: <input name="address" value="123 Demo St"></label>
+    </div>
+    <div>
+      <label>Password: <input name="password" type="password" value="secret123" required></label>
+    </div>
+    <div>
+      <label>Logo (file): <input name="logo" type="file" accept="image/*"></label>
+    </div>
+    <div style="margin-top:8px;">
+      <button type="submit">Register</button>
+    </div>
+  </form>
+
+  <pre id="out" style="margin-top:12px;padding:8px;border:1px solid #ddd;white-space:pre-wrap;">
+    Response will appear here
+  </pre>
+
+  <script>
+    const form = document.getElementById('form');
+    const out = document.getElementById('out');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      out.textContent = 'Uploading...';
+      try {
+        const fd = new FormData(form);
+        // If no file selected, we still send the form (server allows logo body field)
+        const res = await fetch('http://localhost:3000/api/institutions', {
+          method: 'POST',
+          body: fd,
+        });
+        const txt = await res.text();
+        try { out.textContent = JSON.stringify(JSON.parse(txt), null, 2); } catch (e) { out.textContent = txt; }
+      } catch (err) {
+        out.textContent = 'Error: ' + err.message;
+      }
+    });
+  </script>
+</body>
+</html>

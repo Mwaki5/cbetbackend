@@ -5,19 +5,19 @@ module.exports = (sequelize) => {
   const Evidence = sequelize.define(
     "Evidence",
     {
-      evidence_id: {
+      evidenceId: {
         allowNull: false,
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
-      enrollment_id: {
+      enrollmentId: {
         type: DataTypes.UUID,
       },
-      file_url: {
+      fileUrl: {
         type: DataTypes.TEXT,
       },
-      file_type: {
+      fileType: {
         type: DataTypes.STRING,
       },
       description: {
@@ -27,29 +27,33 @@ module.exports = (sequelize) => {
         type: DataTypes.ENUM("pending", "approved", "rejected"),
         defaultValue: "approved",
       },
-      reviewed_by: {
+      reviewedBy: {
         type: DataTypes.UUID,
         references: {
           model: "users",
-          key: "user_id",
+          key: "userId",
         },
       },
-      uploaded_at: {
+      uploadedAt: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
+      },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
       },
       updatedAt: {
         allowNull: false,
         type: DataTypes.DATE,
       },
     },
-    { tableName: "evidences", underscored: true, timestamps: true }
+    { tableName: "evidences", underscored: false, timestamps: true }
   );
 
   Evidence.associate = (models) => {
-    Evidence.belongsTo(models.Enrollment, { foreignKey: "enrollment_id" });
+    Evidence.belongsTo(models.Enrollment, { foreignKey: "enrollmentId" });
     Evidence.belongsTo(models.User, {
-      foreignKey: "reviewed_by",
+      foreignKey: "reviewedBy",
       as: "reviewer",
     });
   };

@@ -3,13 +3,13 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("institutions", {
-      institution_id: {
+      institutionId: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
       },
-      institution_name: {
+      institutionName: {
         type: Sequelize.STRING,
       },
       email: {
@@ -23,7 +23,7 @@ module.exports = {
       address: {
         type: Sequelize.TEXT,
       },
-      password_harsh: {
+      passwordHarsh: {
         type: Sequelize.TEXT,
         allowNull: false,
       },

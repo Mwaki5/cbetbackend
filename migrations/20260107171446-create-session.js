@@ -6,26 +6,26 @@ const { UUIDV4 } = require("sequelize");
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("sessions", {
-      session_id: {
+      sessionId: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
       },
-      institution_id: {
+      institutionId: {
         type: Sequelize.UUID,
         references: {
           model: "institutions",
-          key: "institution_id",
+          key: "institutionId",
         },
       },
-      session_name: {
+      sessionName: {
         type: Sequelize.STRING,
       },
-      start_date: {
+      startDate: {
         type: Sequelize.DATE,
       },
-      end_date: {
+      endDate: {
         type: Sequelize.DATE,
       },
       status: {

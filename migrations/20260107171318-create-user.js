@@ -3,16 +3,16 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("users", {
-      user_id: {
+      userId: {
         allowNull: false,
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
       },
-      institution_id: {
+      institutionId: {
         type: Sequelize.UUID,
         references: {
-          key: "institution_id",
+          key: "institutionId",
           model: "institutions",
         },
       },
@@ -24,6 +24,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      profilePic: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       email: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -31,7 +35,7 @@ module.exports = {
           isEmail: true,
         },
       },
-      password_harsh: {
+      passwordHarsh: {
         type: Sequelize.TEXT,
       },
       role: {

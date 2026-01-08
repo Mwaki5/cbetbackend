@@ -5,31 +5,31 @@ module.exports = (sequelize) => {
   const Enrollment = sequelize.define(
     "Enrollment",
     {
-      enrollment_id: {
+      enrollmentId: {
         allowNull: false,
         primaryKey: true,
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
       },
-      student_id: {
+      studentId: {
         type: DataTypes.UUID,
         references: {
           model: "users",
-          key: "user_id",
+          key: "userId",
         },
       },
-      unit_id: {
+      unitId: {
         type: DataTypes.UUID,
         references: {
           model: "units",
-          key: "unit_id",
+          key: "unitId",
         },
       },
-      session_id: {
+      sessionId: {
         type: DataTypes.UUID,
         references: {
           model: "sessions",
-          key: "session_id",
+          key: "sessionId",
         },
       },
       enrolledAt: {
@@ -40,23 +40,27 @@ module.exports = (sequelize) => {
         allowNull: false,
         type: DataTypes.DATE,
       },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
     },
-    { tableName: "enrollments", underscored: true, timestamps: true }
+    { tableName: "enrollments", underscored: false, timestamps: true }
   );
 
   Enrollment.associate = (models) => {
     Enrollment.belongsTo(models.User, {
-      foreignKey: "student_id",
+      foreignKey: "studentId",
       as: "student",
     });
-    Enrollment.belongsTo(models.Unit, { foreignKey: "unit_id" });
-    Enrollment.belongsTo(models.Session, { foreignKey: "session_id" });
+    Enrollment.belongsTo(models.Unit, { foreignKey: "unitId" });
+    Enrollment.belongsTo(models.Session, { foreignKey: "sessionId" });
     Enrollment.hasMany(models.Mark, {
-      foreignKey: "enrollment_id",
+      foreignKey: "enrollmentId",
       as: "marks",
     });
     Enrollment.hasMany(models.Evidence, {
-      foreignKey: "enrollment_id",
+      foreignKey: "enrollmentId",
       as: "evidences",
     });
   };

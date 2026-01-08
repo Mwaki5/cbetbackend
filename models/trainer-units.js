@@ -15,21 +15,21 @@ module.exports = (sequelize) => {
         type: DataTypes.UUID,
         references: {
           model: "users",
-          key: "user_id",
+          key: "userId",
         },
       },
       unitId: {
         type: DataTypes.UUID,
         references: {
           model: "units",
-          key: "unit_id",
+          key: "unitId",
         },
       },
       sessionId: {
         type: DataTypes.UUID,
         references: {
           model: "sessions",
-          key: "session_id",
+          key: "sessionId",
         },
       },
       createdAt: {
@@ -41,7 +41,7 @@ module.exports = (sequelize) => {
         type: DataTypes.DATE,
       },
     },
-    { tableName: "staff_units", underscored: true, timestamps: true }
+    { tableName: "staff_units", underscored: false, timestamps: true }
   );
 
   StaffUnit.associate = (models) => {

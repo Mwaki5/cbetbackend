@@ -5,24 +5,24 @@ module.exports = (sequelize) => {
   const ActivityLog = sequelize.define(
     "ActivityLog",
     {
-      log_id: {
+      logId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      user_id: {
+      userId: {
         type: DataTypes.UUID,
         references: {
           model: "users",
-          key: "user_id",
+          key: "userId",
         },
       },
-      institution_id: {
+      institutionId: {
         type: DataTypes.UUID,
         references: {
           model: "institutions",
-          key: "institution_id",
+          key: "institutionId",
         },
       },
       action: {
@@ -31,7 +31,7 @@ module.exports = (sequelize) => {
       entity: {
         type: DataTypes.STRING,
       },
-      entity_id: {
+      entityId: {
         type: DataTypes.UUID,
       },
       createdAt: {
@@ -43,12 +43,12 @@ module.exports = (sequelize) => {
         type: DataTypes.DATE,
       },
     },
-    { tableName: "activity_logs", underscored: true, timestamps: true }
+    { tableName: "activity_logs", underscored: false, timestamps: true }
   );
 
   ActivityLog.associate = (models) => {
-    ActivityLog.belongsTo(models.User, { foreignKey: "user_id" });
-    ActivityLog.belongsTo(models.Institution, { foreignKey: "institution_id" });
+    ActivityLog.belongsTo(models.User, { foreignKey: "userId" });
+    ActivityLog.belongsTo(models.Institution, { foreignKey: "institutionId" });
   };
 
   return ActivityLog;

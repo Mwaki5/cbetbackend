@@ -3,25 +3,25 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("subscriptions", {
-      subscription_id: {
+      subscriptionId: {
         primaryKey: true,
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
       },
-      institution_id: {
+      institutionId: {
         type: Sequelize.UUID,
         references: {
           model: "institutions",
-          key: "institution_id",
+          key: "institutionId",
         },
       },
       plan: {
         type: Sequelize.STRING,
       },
-      max_students: {
+      maxStudents: {
         type: Sequelize.INTEGER,
       },
-      storage_limitMb: {
+      storageLimitMb: {
         type: Sequelize.INTEGER,
       },
       expiresAt: {

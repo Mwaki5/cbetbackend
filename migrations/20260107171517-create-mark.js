@@ -3,17 +3,17 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("marks", {
-      mark_id: {
+      markId: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
       },
-      enrollment_id: {
+      enrollmentId: {
         type: Sequelize.UUID,
         references: {
           model: "enrollments",
-          key: "enrollment_id",
+          key: "enrollmentId",
         },
       },
       type: {
@@ -22,11 +22,11 @@ module.exports = {
       marks: {
         type: Sequelize.INTEGER,
       },
-      graded_by: {
+      gradedBy: {
         type: Sequelize.UUID,
         references: {
           model: "users",
-          key: "user_id",
+          key: "userId",
         },
       },
       createdAt: {
