@@ -17,18 +17,22 @@ module.exports = (sequelize) => {
           model: "institutions",
           key: "institutionId",
         },
+        allowNull: false,
       },
       sessionName: {
         type: DataTypes.STRING,
+        allowNull: false,
       },
       startDate: {
         type: DataTypes.DATE,
+        allowNull: false,
       },
       endDate: {
         type: DataTypes.DATE,
       },
       status: {
         type: DataTypes.ENUM("Upcoming", "Active", "Done"),
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

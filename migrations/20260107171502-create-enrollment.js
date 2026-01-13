@@ -18,6 +18,7 @@ module.exports = {
           model: "users",
           key: "userId",
         },
+        allowNull: false,
       },
       unitId: {
         type: Sequelize.UUID,
@@ -25,6 +26,7 @@ module.exports = {
           model: "units",
           key: "unitId",
         },
+        allowNull: false,
       },
       sessionId: {
         type: Sequelize.UUID,
@@ -32,6 +34,7 @@ module.exports = {
           model: "sessions",
           key: "sessionId",
         },
+        allowNull: false,
       },
       enrolledAt: {
         type: Sequelize.DATE,

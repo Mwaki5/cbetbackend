@@ -18,12 +18,15 @@ module.exports = {
           model: "institutions",
           key: "institutionId",
         },
+        allowNull: false,
       },
       sessionName: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       startDate: {
         type: Sequelize.DATE,
+        allowNull: false,
       },
       endDate: {
         type: Sequelize.DATE,

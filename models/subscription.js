@@ -16,18 +16,23 @@ module.exports = (sequelize) => {
           model: "institutions",
           key: "institutionId",
         },
+        allowNull: false,
       },
       plan: {
         type: DataTypes.STRING,
+        allowNull: false,
       },
       maxStudents: {
         type: DataTypes.INTEGER,
+        allowNull: false,
       },
       storageLimitMb: {
         type: DataTypes.INTEGER,
+        allowNull: false,
       },
       expiresAt: {
         type: DataTypes.DATE,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

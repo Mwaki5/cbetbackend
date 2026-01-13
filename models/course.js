@@ -17,19 +17,31 @@ module.exports = (sequelize) => {
           model: "institutions",
           key: "institutionId",
         },
+        allowNull: false,
       },
-      departmentId: {
-        type: DataTypes.INTEGER,
+      deptId: {
+        type: DataTypes.UUID,
         references: {
           model: "departments",
           key: "deptId",
         },
+        allowNull: false,
       },
-      name: {
+      courseName: {
         type: DataTypes.STRING,
+        allowNull: false,
       },
       courseCode: {
         type: DataTypes.STRING,
+        unique: true,
+      },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
       },
     },
     { tableName: "courses", underscored: false, timestamps: true }
@@ -37,7 +49,7 @@ module.exports = (sequelize) => {
 
   Course.associate = (models) => {
     Course.belongsTo(models.Institution, { foreignKey: "institutionId" });
-    Course.belongsTo(models.Department, { foreignKey: "departmentId" });
+    Course.belongsTo(models.Department, { foreignKey: "deptId" });
     Course.hasMany(models.Unit, { foreignKey: "courseId", as: "units" });
   };
 

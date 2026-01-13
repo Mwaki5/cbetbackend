@@ -17,6 +17,7 @@ module.exports = (sequelize) => {
           model: "users",
           key: "userId",
         },
+        allowNull: false,
       },
       institutionId: {
         type: DataTypes.UUID,
@@ -24,9 +25,11 @@ module.exports = (sequelize) => {
           model: "institutions",
           key: "institutionId",
         },
+        allowNull: false,
       },
       action: {
         type: DataTypes.STRING,
+        allowNull: false,
       },
       entity: {
         type: DataTypes.STRING,

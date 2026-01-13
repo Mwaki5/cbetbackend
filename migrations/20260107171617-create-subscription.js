@@ -14,9 +14,11 @@ module.exports = {
           model: "institutions",
           key: "institutionId",
         },
+        allowNull: false,
       },
       plan: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       maxStudents: {
         type: Sequelize.INTEGER,

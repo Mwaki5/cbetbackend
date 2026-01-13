@@ -14,15 +14,23 @@ module.exports = {
       },
       enrollmentId: {
         type: Sequelize.UUID,
+        references: {
+          model: "enrollments",
+          key: "enrollmentId",
+        },
+        allowNull: false,
       },
       fileUrl: {
         type: Sequelize.TEXT,
+        allowNull: false,
       },
       fileType: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       description: {
         type: Sequelize.TEXT,
+        allowNull: true,
       },
       status: {
         type: Sequelize.ENUM("pending", "approved", "rejected"),
@@ -34,6 +42,7 @@ module.exports = {
           model: "users",
           key: "userId",
         },
+        allowNull: true,
       },
       uploadedAt: {
         type: Sequelize.DATE,

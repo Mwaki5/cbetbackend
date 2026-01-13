@@ -6,13 +6,13 @@ const { update } = require("./activitylogs");
 
 function signAccessToken(payload) {
   return jwt.sign(payload, env.ACCESS_TOKEN_SECRET, {
-    expiresIn: env.ACCESS_EXPIRES,
+    expiresIn: env.ACCESS_EXPIRES * 1000,
   });
 }
 
 function signRefreshToken(payload) {
   return jwt.sign(payload, env.REFRESH_TOKEN_SECRET, {
-    expiresIn: Math.max(env.REFRESH_EXPIRES, 60) + "s",
+    expiresIn: env.REFRESH_EXPIRES * 1000,
   });
 }
 
@@ -51,7 +51,7 @@ const login = async (req, res) => {
       httpOnly: true,
       secure: true,
       sameSite: "Strict",
-      maxAge: env.REFRESH_EXPIRES * 1000,
+      maxAge: env.REFRESH_EXPIRES * 24 * 1000,
     });
 
     return res.json({
@@ -64,17 +64,22 @@ const login = async (req, res) => {
     return res.status(500).json({ error: "Server error" });
   }
 };
+
 const adminLogin = async (req, res) => {
-  const { email, password } = req.body || {};
+  const { email, password } = req.body;
   try {
     const institution = await db.Institution.findOne({ where: { email } });
-    if (!institution)
+    if (!institution) {
       return res.status(401).json({ error: "Invalid credentials" });
+    }
+
     const ok = await bcrypt.compare(password, institution.passwordHarsh || "");
-    if (!ok) return res.status(401).json({ error: "Invalid credentials" });
+    if (!ok) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
 
     const payload = {
-      institutionId: institution.id,
+      institutionId: institution.institutionId,
       institutionName: institution.institutionName,
       email: institution.email,
       logo: institution.logo,
@@ -85,10 +90,11 @@ const adminLogin = async (req, res) => {
       address: institution.address,
       phone: institution.phone,
     };
+    console.log("logged in");
     const accessToken = signAccessToken(payload);
     const refreshToken = signRefreshToken(payload);
     // store refresh token on user record
-    const expiresAt = new Date(Date.now() + env.REFRESH_EXPIRES * 1000);
+    const expiresAt = new Date(Date.now() + env.REFRESH_EXPIRES * 24 * 1000);
     await institution.update({
       refreshToken: refreshToken,
       refreshExpiresAt: expiresAt,
@@ -96,8 +102,8 @@ const adminLogin = async (req, res) => {
     res.cookie("jwt", refreshToken, {
       httpOnly: true,
       secure: true,
-      sameSite: "Strict",
-      maxAge: env.REFRESH_EXPIRES * 1000,
+      sameSite: "none",
+      maxAge: env.REFRESH_EXPIRES * 24 * 1000,
     });
 
     return res.json({
@@ -111,6 +117,68 @@ const adminLogin = async (req, res) => {
   }
 };
 
+async function refreshAdmin(req, res) {
+  try {
+    const refreshToken = req?.cookies?.jwt;
+    if (!refreshToken) {
+      return res.status(400).json({ error: "refreshToken required" });
+    }
+
+    const decoded = jwt.verify(refreshToken, env.REFRESH_TOKEN_SECRET);
+    const InstitutionExists = await db.Institution.findOne({
+      where: { institutionId: decoded.institutionId },
+    });
+
+    if (!InstitutionExists)
+      return res.status(401).json({ error: "Refresh token not found" });
+    if (
+      InstitutionExists.refreshExpiresAt &&
+      new Date(useExists.refreshExpiresAt) < new Date()
+    ) {
+      await InstitutionExists.update({
+        refreshToken: null,
+        refreshExpiresAt: null,
+      });
+      return res.status(401).json({ error: "Refresh token expired" });
+    }
+    // issue new tokens (rotate)
+    const payload = {
+      institutionId: InstitutionExists.institutionId,
+      institutionName: InstitutionExists.institutionName,
+      email: InstitutionExists.email,
+      logo: InstitutionExists.logo,
+      email: InstitutionExists.email,
+      createdAt: InstitutionExists.createdAt,
+      updatedAt: InstitutionExists.updatedAt,
+      status: InstitutionExists.status,
+      address: InstitutionExists.address,
+      phone: InstitutionExists.phone,
+    };
+    const accessToken = signAccessToken(payload);
+    const newrefreshToken = signRefreshToken(payload);
+    // store refresh token on user record
+    const expiresAt = new Date(Date.now() + env.REFRESH_EXPIRES * 24 * 1000);
+    await InstitutionExists.update({
+      refreshToken: newrefreshToken,
+      refreshExpiresAt: expiresAt,
+    });
+    res.cookie("jwt", refreshToken, {
+      httpOnly: true,
+      secure: env.NODE_ENV == "production",
+      sameSite: "lax",
+      maxAge: env.REFRESH_EXPIRES * 24 * 1000,
+    });
+
+    return res.json({
+      success: true,
+      accessToken,
+      data: payload,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Server error" });
+  }
+}
 async function refresh(req, res) {
   const refreshToken = req.cookies?.jwt;
   if (!refreshToken)
@@ -140,7 +208,7 @@ async function refresh(req, res) {
       firstname: user.firstname,
       lastname: user.lastname,
       email: user.email,
-      profilePic: user.profilePic,
+      // profilePic: user.profilePic,
       role: user.role,
       status: user.status,
     };
@@ -163,9 +231,9 @@ async function refresh(req, res) {
 
     res.cookie("jwt", refreshToken, {
       httpOnly: true,
-      secure: true,
-      sameSite: "Strict",
-      maxAge: env.REFRESH_EXPIRES * 1000,
+      secure: env.NODE_ENV == "production",
+      sameSite: "lax",
+      maxAge: env.REFRESH_EXPIRES * 24 * 1000,
     });
     return res.json({
       success: true,
@@ -209,3 +277,12 @@ async function create(req, res) {
     return res.status(400).json({ error: err.message });
   }
 }
+
+module.exports = {
+  adminLogin,
+  login,
+  refresh,
+  refreshAdmin,
+  logout,
+  create,
+};

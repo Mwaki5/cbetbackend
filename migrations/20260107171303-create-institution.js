@@ -11,17 +11,24 @@ module.exports = {
       },
       institutionName: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       email: {
         type: Sequelize.STRING,
         unique: true,
+        allowNull: false,
+        validate: {
+          isEmail: true,
+        },
       },
       phone: {
         type: Sequelize.STRING,
         unique: true,
+        allowNull: false,
       },
       address: {
         type: Sequelize.TEXT,
+        allowNull: false,
       },
       passwordHarsh: {
         type: Sequelize.TEXT,
@@ -32,6 +39,8 @@ module.exports = {
       },
       status: {
         type: Sequelize.ENUM("pending", "approved", "rejected"),
+        defaultValue: "pending",
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

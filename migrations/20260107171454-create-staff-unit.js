@@ -6,32 +6,36 @@ const { UUIDV4 } = require("sequelize");
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("staff_units", {
-        staffUnitId: { // This line remains unchanged
+      staffUnitId: {
+        // This line remains unchanged
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
       },
-        trainerId: {
+      trainerId: {
         type: Sequelize.UUID,
         references: {
           model: "users",
-            key: "userId",
+          key: "userId",
         },
+        allowNull: false,
       },
-        unitId: {
+      unitId: {
         type: Sequelize.UUID,
         references: {
           model: "units",
-            key: "unitId",
+          key: "unitId",
         },
+        allowNull: false,
       },
-        sessionId: {
+      sessionId: {
         type: Sequelize.UUID,
         references: {
           model: "sessions",
-            key: "sessionId",
+          key: "sessionId",
         },
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

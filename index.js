@@ -2,16 +2,19 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const path = require("path");
-const env = require("./config/env");
-const corsOptions = require("./config/cors");
+const cookieParser = require("cookie-parser");
+const env = require("./utils/env");
+const { corsOption } = require("./middleware/cors");
+const { credentials } = require("./middleware/credentials");
 const verifyJwt = require("./middleware/verifyJwt");
 const apiRoutes = require("./routes");
 const { sequelize } = require("./models");
+const multer = require("multer");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-app.use(cors(corsOptions));
+app.use(credentials);
+app.use(cors(corsOption));
 
 // Serve uploaded files under /uploads
 app.use("/uploads", express.static(path.join(__dirname, "public", "uploads")));
@@ -23,13 +26,17 @@ app.get("/upload-demo.html", (req, res) =>
 app.get("/upload-demo", (req, res) => res.redirect("/upload-demo.html"));
 
 // Routes that start (public routes) above verify JWT middleware
+
+app.use(cookieParser());
 app.use("/auth", require("./routes/auth"));
 
 // Verify JWT middleware
 app.use(verifyJwt);
 
 // The rest of the routes below
+
 app.use("/api", apiRoutes);
+
 
 const PORT = env.PORT || 3000;
 

@@ -7,9 +7,9 @@ module.exports = (sequelize) => {
     {
       deptId: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
       },
       institutionId: {
         type: DataTypes.UUID,
@@ -17,19 +17,16 @@ module.exports = (sequelize) => {
           model: "institutions",
           key: "institutionId",
         },
+        allowNull: false,
       },
       deptCode: {
         type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
       },
       deptName: {
         type: DataTypes.STRING,
-      },
-      hod: {
-        type: DataTypes.UUID,
-        references: {
-          model: "users",
-          key: "userId",
-        },
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
@@ -45,9 +42,8 @@ module.exports = (sequelize) => {
 
   Department.associate = (models) => {
     Department.belongsTo(models.Institution, { foreignKey: "institutionId" });
-    Department.belongsTo(models.User, { foreignKey: "hod", as: "hodUser" });
     Department.hasMany(models.Course, {
-      foreignKey: "departmentId",
+      foreignKey: "deptId",
       as: "courses",
     });
   };

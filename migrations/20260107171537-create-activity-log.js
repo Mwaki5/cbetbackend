@@ -25,9 +25,11 @@ module.exports = {
       },
       action: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       entity: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       entityId: {
         type: Sequelize.UUID,

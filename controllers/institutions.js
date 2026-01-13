@@ -53,9 +53,13 @@ async function list(req, res) {
 
 async function get(req, res) {
   try {
-    const item = await db.Institution.findOne({ where: { id: req.params.id } });
+    const { email } = req.query;
+    const item = await db.Institution.findOne({
+      where: { email },
+      attributes: { exclude: ["passwordHarsh"] },
+    });
     if (!item) return res.status(404).json({ error: "Not found" });
-    return res.json(item);
+    return res.json([item]);
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: "Server error" });
@@ -69,7 +73,6 @@ const create = async (req, res) => {
     if (req.file) {
       req.body.logo = `/uploads/profile/${req.file.filename}`;
     }
-
     const phoneEmailExists = await db.Institution.findOne({
       where: {
         [Op.or]: [{ phone }, { email }],

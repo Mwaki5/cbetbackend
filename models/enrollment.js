@@ -24,6 +24,7 @@ module.exports = (sequelize) => {
           model: "units",
           key: "unitId",
         },
+        allowNull: false,
       },
       sessionId: {
         type: DataTypes.UUID,
@@ -31,10 +32,12 @@ module.exports = (sequelize) => {
           model: "sessions",
           key: "sessionId",
         },
+        allowNull: false,
       },
       enrolledAt: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
+        allowNull: false,
       },
       updatedAt: {
         allowNull: false,

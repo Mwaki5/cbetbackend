@@ -18,12 +18,16 @@ module.exports = {
           model: "courses",
           key: "courseId",
         },
+        allowNull: false,
       },
       unitCode: {
         type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
       },
       unitName: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

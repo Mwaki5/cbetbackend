@@ -15,6 +15,7 @@ module.exports = {
           key: "institutionId",
           model: "institutions",
         },
+        allowNull: false,
       },
       firstname: {
         type: Sequelize.STRING,
@@ -33,6 +34,14 @@ module.exports = {
         allowNull: false,
         validate: {
           isEmail: true,
+        },
+      },
+      deptId: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {
+          model: "departments",
+          key: "deptId",
         },
       },
       passwordHarsh: {

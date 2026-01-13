@@ -1,65 +1,38 @@
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
-const { detectCategory, validateFileUniversal, IMAGE_MIMES, VIDEO_MIMES, DOCUMENT_MIMES } = require('../utils/fileValidator');
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 
-const PUBLIC_ROOT = path.join(__dirname, '..', 'public', 'uploads');
+module.exports = function upload(options = {}) {
+  const {
+    folder = "uploads",
+    allowedMimes = [],
+    maxSize = 10 * 1024 * 1024, // 10MB default
+  } = options;
 
-function ensureDir(p) {
-  if (!fs.existsSync(p)) fs.mkdirSync(p, { recursive: true });
-}
+  const uploadDir = path.join("public", "uploads", folder);
 
-function createUploader(options = {}) {
-  const { profile = false, allowedMimes = null, maxSize = null, baseRoot = PUBLIC_ROOT } = options;
-
-  const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      try {
-        if (profile) {
-          const dir = path.join(baseRoot, 'profile');
-          ensureDir(dir);
-          return cb(null, dir);
-        }
-        const detected = detectCategory(file.mimetype) || 'documents';
-        const dir = path.join(baseRoot, 'evidences', detected);
-        ensureDir(dir);
-        return cb(null, dir);
-      } catch (err) {
-        return cb(err);
-      }
-    },
-    filename: function (req, file, cb) {
-      const safeName = file.originalname.replace(/[^a-zA-Z0-9._-]/g, '_');
-      const name = `${Date.now()}-${Math.floor(Math.random() * 1e6)}-${safeName}`;
-      cb(null, name);
-    }
-  });
-
-  function fileFilter(req, file, cb) {
-    try {
-      const opts = {};
-      if (maxSize) opts.maxSize = maxSize;
-      if (allowedMimes) opts.allowedMimes = allowedMimes;
-      // validate; will throw on error
-      validateFileUniversal(file, opts);
-      // additional check: profiles only allow images
-      if (profile) {
-        const cat = detectCategory(file.mimetype);
-        if (!cat || cat !== 'pictures') return cb(new Error('Only image files allowed for profile'));
-      }
-      cb(null, true);
-    } catch (err) {
-      cb(err);
-    }
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
   }
 
-  const limits = {};
-  if (maxSize) limits.fileSize = maxSize;
+  const storage = multer.diskStorage({
+    destination: uploadDir,
+    filename: (req, file, cb) => {
+      const unique = Date.now() + "-" + Math.round(Math.random() * 1e9);
+      cb(null, unique + path.extname(file.originalname));
+    },
+  });
 
-  return multer({ storage, fileFilter, limits });
-}
+  const fileFilter = (req, file, cb) => {
+    if (allowedMimes.length && !allowedMimes.includes(file.mimetype)) {
+      return cb(new Error("Invalid file type"), false);
+    }
+    cb(null, true);
+  };
 
-const uploadProfile = createUploader({ profile: true, allowedMimes: IMAGE_MIMES, maxSize: 5 * 1024 * 1024 });
-const uploadEvidence = createUploader({ profile: false, allowedMimes: IMAGE_MIMES.concat(VIDEO_MIMES, DOCUMENT_MIMES), maxSize: 50 * 1024 * 1024 });
-
-module.exports = { createUploader, uploadProfile, uploadEvidence };
+  return multer({
+    storage,
+    limits: { fileSize: maxSize },
+    fileFilter,
+  });
+};

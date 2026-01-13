@@ -15,19 +15,24 @@ module.exports = {
           model: "institutions",
           key: "institutionId",
         },
+        allowNull: false,
       },
-      departmentId: {
-        type: Sequelize.INTEGER,
+      deptId: {
+        type: Sequelize.UUID,
         references: {
           model: "departments",
           key: "deptId",
         },
+        allowNull: false,
       },
-      name: {
+      courseName: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       courseCode: {
         type: Sequelize.STRING,
+        unique: true,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

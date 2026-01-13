@@ -17,12 +17,15 @@ module.exports = (sequelize) => {
           model: "enrollments",
           key: "enrollmentId",
         },
+        allowNull: false,
       },
       type: {
         type: DataTypes.ENUM("Practical", "Theory"),
+        allowNull: false,
       },
       marks: {
         type: DataTypes.INTEGER,
+        allowNull: false,
       },
       gradedBy: {
         type: DataTypes.UUID,
@@ -30,6 +33,7 @@ module.exports = (sequelize) => {
           model: "users",
           key: "userId",
         },
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

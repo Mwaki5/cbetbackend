@@ -17,12 +17,16 @@ module.exports = (sequelize) => {
           model: "courses",
           key: "courseId",
         },
+        allowNull: false,
       },
       unitCode: {
         type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
       },
       unitName: {
         type: DataTypes.STRING,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

@@ -17,6 +17,7 @@ module.exports = (sequelize) => {
           key: "institutionId",
           model: "institutions",
         },
+        allowNull: false,
       },
       firstname: {
         type: DataTypes.STRING,
@@ -39,7 +40,18 @@ module.exports = (sequelize) => {
       },
       passwordHarsh: {
         type: DataTypes.TEXT,
+        allowNull: false,
       },
+
+      deptId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+          model: "departments",
+          key: "deptId",
+        },
+      },
+
       refreshToken: {
         type: DataTypes.TEXT,
         allowNull: true,
@@ -94,7 +106,7 @@ module.exports = (sequelize) => {
       as: "activityLogs",
     });
     User.hasOne(models.Department, {
-      foreignKey: "hod",
+      foreignKey: "deptId",
       as: "headedDepartment",
     });
   };

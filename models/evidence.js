@@ -1,4 +1,5 @@
 "use strict";
+const { allow } = require("joi");
 const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
@@ -13,15 +14,23 @@ module.exports = (sequelize) => {
       },
       enrollmentId: {
         type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+          model: "enrollments",
+          key: "enrollmentId",
+        },
       },
       fileUrl: {
         type: DataTypes.TEXT,
+        allowNull: false,
       },
       fileType: {
         type: DataTypes.STRING,
+        allowNull: false,
       },
       description: {
         type: DataTypes.TEXT,
+        allowNull: true,
       },
       status: {
         type: DataTypes.ENUM("pending", "approved", "rejected"),
@@ -33,6 +42,7 @@ module.exports = (sequelize) => {
           model: "users",
           key: "userId",
         },
+        allowNull: true,
       },
       uploadedAt: {
         type: DataTypes.DATE,

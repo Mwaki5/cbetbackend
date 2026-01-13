@@ -13,17 +13,21 @@ module.exports = (sequelize) => {
       },
       institutionName: {
         type: DataTypes.STRING,
+        allowNull: false,
       },
       email: {
         type: DataTypes.STRING,
         unique: true,
+        allowNull: false,
       },
       phone: {
         type: DataTypes.STRING,
         unique: true,
+        allowNull: false,
       },
       address: {
         type: DataTypes.TEXT,
+        allowNull: false,
       },
       passwordHarsh: {
         type: DataTypes.TEXT,
@@ -31,6 +35,7 @@ module.exports = (sequelize) => {
       },
       logo: {
         type: DataTypes.TEXT,
+        allowNull: true,
       },
       status: {
         type: DataTypes.ENUM("pending", "approved", "rejected"),
